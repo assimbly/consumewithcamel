@@ -131,6 +131,7 @@ public class ConsumeWithCamel extends AbstractProcessor {
         return this.relationships;
     }
 
+    
     @Override
     public final List<PropertyDescriptor> getSupportedPropertyDescriptors() {
         return descriptors;
