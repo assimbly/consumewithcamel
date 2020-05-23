@@ -142,7 +142,6 @@ public class ConsumeWithCamel extends AbstractProcessor {
 
     	//Use Assimbly Connector to manage Apache Camel (https://github.com/assimbly/connector)
     	getLogger().info("Starting Apache Camel");
-		getLogger().info("1. On scheduled.");
         
         //Start Apache camel
         try {
@@ -152,14 +151,10 @@ public class ConsumeWithCamel extends AbstractProcessor {
 			e2.printStackTrace();
 		}
 
-		getLogger().info("2. On scheduled.");
-
 		//Create a flow ID
 		UUID uuid = UUID.randomUUID();
         flowId = context.getName() + uuid.toString();
 
-		getLogger().info("3. On scheduled.");
-        
    		//configure the flow (Camel route)
         try {
 			configureCamelFlow(context);
@@ -168,8 +163,6 @@ public class ConsumeWithCamel extends AbstractProcessor {
 			e1.printStackTrace();
 		}
         
-		getLogger().info("4. On scheduled.");
-        
    		//start the flow (Camel route)
         try {
 			connector.startFlow(flowId);
@@ -177,9 +170,6 @@ public class ConsumeWithCamel extends AbstractProcessor {
 			getLogger().error("Can't start Apache Camel.");
 			e1.printStackTrace();
 		}        
-        
-		getLogger().info("5. On scheduled.");
-
         
    		//Create the endpoint producer
    		try {
@@ -195,8 +185,6 @@ public class ConsumeWithCamel extends AbstractProcessor {
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) throws ProcessException {
 
-		getLogger().info("1. On trigger.");
-    	
         //Get the message from the Camel route
     	Object output = template.receiveBody("direct:nifi-" + flowId);
 
@@ -205,12 +193,8 @@ public class ConsumeWithCamel extends AbstractProcessor {
             return;
         }
     	
-		getLogger().info("2. On trigger consumed.");
-    	
       	FlowFile flowfile = session.create();
 
-		getLogger().info("3. On trigger.");
-       
         // To write the results back out to flow file
         flowfile = session.write(flowfile, new OutputStreamCallback() {
 
@@ -220,12 +204,8 @@ public class ConsumeWithCamel extends AbstractProcessor {
             }
         });
 
-		getLogger().info("4. On trigger.");
-
         session.transfer(flowfile, SUCCESS);
 
-		getLogger().info("5. On trigger.");
-        
     }
 
 
